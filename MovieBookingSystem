@@ -1,0 +1,239 @@
+package MBS;
+import java.util.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class MovieBookingSystem {
+	 static Scanner sc = new Scanner(System.in);
+	 
+	 static char seats[][] = { {'O','O','O','O','O','O','O','O'},
+			                   {'O','O','O','O','O','O','O','O'},
+			                   {'O','O','x','x','x','O','O','O'},
+			                   {'O','O','O','O','O','O','O','O'},
+			                   {'O','O','O','O','O','O','O','O'},
+			                   {'O','O','O','O','O','O','O','O'},
+			                   {'O','O','O','O','O','O','O','O'},
+			                   {'O','O','O','O','O','O','O','O'},
+		                     };
+	 static void displaySeats() {
+	        System.out.println("\nSeat Layout:");
+
+	        System.out.println("   1  2  3  4  5  6  7  8");
+
+	        char rowName = 'A';
+
+	        for (int i = 0; i < seats.length; i++) {
+	            System.out.print(rowName + " ");
+	            for (int j = 0; j < seats[i].length; j++) {
+	                System.out.print("[" +seats[i][j] +"]");
+	            }
+	            System.out.println();
+	            rowName++;
+	        }
+	    }
+
+	 
+	 
+	
+	static int SelectOption(String title, String options[]) {
+		System.out.println(title);
+		for(int i =0;i<options.length;i++) {
+			System.out.println((i+1) + ". " + options[i]);
+		}
+		int choice = sc.nextInt();
+		return choice -1;
+	}
+	
+	public static void main(String args[]) {
+		
+				System.out.println("Enter your name :");
+				String name = sc.nextLine();
+				
+				String districts[] = {"Madurai", "Chennai", "Coimbatore"};
+				int dChoice;
+                
+
+                
+
+                
+
+                while (true) {
+                    dChoice = SelectOption("Select District:", districts);
+                    if (dChoice >= 0 && dChoice < districts.length) {
+                    	System.out.println("You selected: " + districts[dChoice]);
+                        break; // valid
+                    } else {
+                        System.out.println("❌ Invalid choice! Enter again.");
+                        
+                    }
+                }
+
+		        
+				
+                String theatres[][] = {{"Vetri", "Guru", "Ambika"},
+		                               {"Inox", "AGS", "Sathyam"},
+                                       {"Ganesh", "Rohini", "priyaComplex"}};
+                int tChoice;
+             while(true) {
+                tChoice = SelectOption("Select Theatre:", theatres[dChoice]);
+
+                if (tChoice >= 0 && tChoice < theatres[dChoice].length) {
+                	System.out.println("You selected Theatre: " + theatres[dChoice][tChoice]);
+                    break;
+                }else {
+                    System.out.println("Invalid theatre!!");
+                 
+                }
+             }
+
+                
+				
+                String movies[][][] = { 
+                		                { {"Geetha Govindham", "Dear Comrade"},//vetri
+                		                  {"varisu", "fida"},                  //guru
+                		                  {"dada", "lift"}                     //ambiga
+                		                },
+                		                { {"vikram", "dude"},
+                		                  {"dragon", "ramayana"},
+                		                  {"Mahabharat", "KGF"}
+                		                },
+                		                { {"visil", "dude"},
+                	                      {"Hii Naana", "Lucky Baskar"}, 
+                	                      {"Mahabharat", "KGF"}
+                		                }
+                	                };
+                String showTimes[] = {"10:00 AM", "2:00 PM", "6:00 PM", "9:00 PM"};
+                int timeChoice;
+                while(true) {
+                   timeChoice = SelectOption("Select Show Time:", showTimes);
+
+                   if (timeChoice >= 0 && timeChoice <= showTimes.length) {
+                	   System.out.println("You selected Show Time: " + showTimes[timeChoice]);
+                	   break;
+                   }else {
+                    System.out.println("❌ Invalid show time");
+                   }
+                    
+                }
+
+                
+                int mChoice;
+                while(true) {
+                  mChoice = SelectOption("Select Movie:", movies[dChoice][tChoice]);
+
+                  if (mChoice >= 0 && mChoice < movies[dChoice][tChoice].length) {
+                	System.out.println("You selected Movie: " + movies[dChoice][tChoice][mChoice]);
+                	break;
+                  }
+                  else {
+                    System.out.println("Invalid movie!! Try again");
+                  }
+                }
+
+                
+                displaySeats();
+
+                System.out.print("\nEnter number of seats to book: ");
+                int n = sc.nextInt();
+                sc.nextLine(); // clear buffer
+
+                int bookedCount = 0;
+
+                while (bookedCount < n) {
+
+                    System.out.print("\nEnter seat (e.g., A1, B2): ");
+                    String input = sc.nextLine().toUpperCase();
+
+                    if (input.length() < 2) {
+                        System.out.println("❌ Invalid format! Use A1, B2");
+                        continue;
+                    }
+
+                    char row = input.charAt(0);
+                    int col = Integer.parseInt(input.substring(1));
+
+                    int rowIndex = row - 'A';
+                    int colIndex = col - 1;
+
+                    if (rowIndex >= 0 && rowIndex < seats.length &&
+                        colIndex >= 0 && colIndex < seats[0].length) {
+
+                        if (seats[rowIndex][colIndex] == 'O') {
+
+                            seats[rowIndex][colIndex] = 'X';
+                            System.out.println("✅ Seat " + input + " booked successfully!");
+                            bookedCount++;
+
+                        } else {
+                            System.out.println("❌ Seat already booked!");
+                        }
+
+                    } else {
+                        System.out.println("❌ Invalid seat! Try again.");
+                    }
+                }
+
+                System.out.println("\n🎉 Booking Completed!");
+                displaySeats();
+                LocalDateTime bookingTime = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+                String formattedTime = bookingTime.format(formatter);
+                int pricePerSeat = 120;
+                int totalAmount = n * pricePerSeat;
+
+                System.out.println("\n💰 PAYMENT SUMMARY");
+                System.out.println("Seats Booked: " + n);
+                System.out.println("Price per Seat: ₹" + pricePerSeat);
+                System.out.println("Total Amount: ₹" + totalAmount);
+                System.out.println("\nSelect Payment Method:");
+                
+                String paymentMethods[] = {"UPI", "Card", "Cash"};
+                while(true) {
+                int payChoice = SelectOption("Choose Payment Method:", paymentMethods);
+
+                if (payChoice >= 0 && payChoice <= paymentMethods.length) {
+                	System.out.println("Payment Method: " + paymentMethods[payChoice]);
+
+                    System.out.println("💳 Processing Payment...");
+
+                    System.out.println("✅ Payment Successful!");
+                    
+                    break;
+                }else {
+                	System.out.println("❌ Invalid payment method");
+                }
+                }
+                
+                System.out.println("\n================ 🎟 MOVIE TICKET =================");
+
+                System.out.println("Name            : " + name);
+                System.out.println("Theatre         : " + theatres[dChoice][tChoice]);
+                System.out.println("Movie           : " + movies[dChoice][tChoice][mChoice]);
+                System.out.println("Movie Time      : " + showTimes[timeChoice]);
+                System.out.println("Booking Time    : " + formattedTime);
+
+                System.out.print("Seats           : ");
+                for (int i = 0; i < seats.length; i++) {
+                    for (int j = 0; j < seats[i].length; j++) {
+                        if (seats[i][j] == 'X') {
+                            System.out.print((char)('A' + i) + "" + (j + 1) + " ");
+                        }
+                    }
+                }
+
+                System.out.println("\nAmount          : ₹" + totalAmount);
+                System.out.println("Payment Status  : SUCCESS");
+
+                System.out.println("==================================================");
+                System.out.println("        🎬 Enjoy Your Movie! Have Fun 🎬");
+                System.out.println("==================================================");
+
+                
+                sc.close();
+}
+
+	            
+	}
+
+
