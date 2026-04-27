@@ -1,0 +1,68 @@
+package STS;
+
+import java.util.*;
+
+public class RandomNumberGuess {
+    public static void main(String args[]) {
+
+        Scanner sc = new Scanner(System.in);
+        Random r = new Random();
+
+        int secret = r.nextInt(100);
+
+        int guess = 0;
+        int attempts = 0;
+        int maxAttempts = 10;
+
+        System.out.println("🎯 Guess the number (0 to 99)");
+        System.out.println("You have " + maxAttempts + " attempts!");
+
+        while (attempts < maxAttempts) {
+
+            // Show attempt number
+            System.out.print("Attempt = " + (attempts + 1) + " → Enter your guess: ");
+
+            // Input validation
+            if (!sc.hasNextInt()) {
+                System.out.println("❌ Enter a valid number!");
+                sc.next();
+                continue;
+            }
+
+            guess = sc.nextInt();
+
+            // Range check
+            if (guess < 0 || guess > 99) {
+                System.out.println("⚠ Enter between 0 to 99");
+                continue;
+            }
+
+            attempts++;
+
+            // Correct guess
+            if (guess == secret) {
+                System.out.println("🎉 Correct! You guessed it!");
+                System.out.println("Attempts used: " + attempts);
+                break;
+               
+            }
+
+            // Hint system
+            if (guess < secret) {
+                System.out.println("📈 Think higher");
+            } else {
+                System.out.println("📉 Think lower");
+            }
+
+            System.out.println("Attempts left: " + (maxAttempts - attempts));
+            System.out.println("---------------------------------");
+        }
+
+        // Game over
+        System.out.println("❌ Game Over! No attempts left.");
+        System.out.println("The correct number was: " + secret);
+
+        System.out.println("👋 Thanks for playing!");
+        sc.close();
+    }
+}
