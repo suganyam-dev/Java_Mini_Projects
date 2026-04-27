@@ -1,0 +1,100 @@
+package Game;
+
+import java.util.*;
+
+public class Bull_Cow {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        Random ran = new Random();
+
+        char playAgain;
+
+        do {
+            int secretNumber = 1000 + ran.nextInt(9000);
+            int attempts = 0;
+            int maxAttempts = 10;
+
+            System.out.println("\n🎯 Guess the 4-digit number (1000 - 9999)");
+            System.out.println("You have " + maxAttempts + " attempts!");
+
+            while (attempts < maxAttempts) {
+
+                System.out.print("Enter your guess: ");
+
+                // Input validation
+                if (!sc.hasNextInt()) {
+                    System.out.println("Please enter a valid number!");
+                    sc.next();
+                    continue;
+                }
+
+                int guess = sc.nextInt();
+
+                // Check range
+                if (guess < 1000 || guess > 9999) {
+                    System.out.println("Enter only 4-digit number!");
+                    continue;
+                }
+
+                attempts++;
+
+                // Correct guess
+                if (guess == secretNumber) {
+                    System.out.println("🎉 Correct! You guessed the number!");
+                    System.out.println("Attempts used: " + attempts);
+                    break;
+                }
+
+                String secret = String.valueOf(secretNumber);
+                String userGuess = String.valueOf(guess);
+
+                int bulls = 0;
+                int correctDigit = 0;
+
+                // Bulls
+                for (int i = 0; i < 4; i++) {
+                    if (userGuess.charAt(i) == secret.charAt(i)) {
+                        bulls++;
+                    }
+                }
+
+                // Count digits
+                int[] secretCount = new int[10];
+                int[] guessCount = new int[10];
+
+                for (int i = 0; i < 4; i++) {
+                    secretCount[secret.charAt(i) - '0']++;
+                    guessCount[userGuess.charAt(i) - '0']++;
+                }
+
+                for (int i = 0; i < 10; i++) {
+                    correctDigit += Math.min(secretCount[i], guessCount[i]);
+                }
+
+                int cows = correctDigit - bulls;
+
+                // Output
+                System.out.println("Bulls (Correct Position): " + bulls);
+                System.out.println("Cows (Wrong Position): " + cows);
+                System.out.println("Attempts left: " + (maxAttempts - attempts));
+                System.out.println("-----------------------------");
+            }
+
+            // If user failed
+            if (attempts == maxAttempts) {
+                System.out.println("❌ Game Over! You've used all attempts.");
+                System.out.println("The correct number was: " + secretNumber);
+            }
+
+            // Play again option
+            System.out.print("Do you want to play again? (y/n): ");
+            playAgain = sc.next().charAt(0);
+
+        } while (playAgain == 'y' || playAgain == 'Y');
+
+        System.out.println("👋 Thanks for playing!");
+        sc.close();
+    }
+}
